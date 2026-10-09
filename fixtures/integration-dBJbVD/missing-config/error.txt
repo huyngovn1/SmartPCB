@@ -1,0 +1,11 @@
+Error: ENOENT: no such file or directory, open 'D:\down\SmartPCB_AD2016_v3\SmartPCB_AD2016\fixtures\integration-dBJbVD\missing-config.json'
+    at Object.readFileSync (node:fs:441:20)
+    at runCLI (D:\down\SmartPCB_AD2016_v3\SmartPCB_AD2016\smartpcb.js:301:47)
+    at Object.<anonymous> (D:\down\SmartPCB_AD2016_v3\SmartPCB_AD2016\smartpcb.js:322:8)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47

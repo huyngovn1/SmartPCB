@@ -1,0 +1,19 @@
+SMARTPCB 3 - BAT DAU
+
+1. Giai nen TOAN BO ZIP. Khong chi lay rieng file .pas.
+2. Trong Altium: File > Open > SmartPCB_AD2016.PrjScr.
+3. Bam tab PCB .PcbDoc can xu ly.
+4. DXP > Run Script > PreviewSmart > Run.
+   Lenh nay tao hinh truoc/sau de xem thu, chua doi vi tri/duong day PCB.
+5. De ap dung tu dong: DXP > Run Script > SmartAuto > Run.
+   Tool tao ban sao PCB, tu bo tri + tinh duong day + nhap ket qua.
+   Neu chi muon di day, chon SmartRouteOnly thay SmartAuto.
+
+DO RONG DAY: dat trong Design > Rules > Routing > Width truoc khi chay.
+Net 3V3: tao rule InNet('3V3'), dat Preferred va uu tien cao hon rule chung.
+
+BAN THU NGHIEM: bo tinh da qua kiem thu Node; adapter CHUA chay thu
+trong Altium 16.1. Khong dam bao di du 100%. Xem cac net con lai trong
+report.html va chay Tools > Design Rule Check sau khi nhap.
+
+Huong dan tieng Viet co dau va cac gioi han: HUONG_DAN.md.

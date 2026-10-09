@@ -1,0 +1,113 @@
+{
+  "version": "3.0",
+  "placement": {
+    "components": [
+      {
+        "id": "U1",
+        "index": 0,
+        "x": 2,
+        "y": 5,
+        "rotation": 0,
+        "locked": true,
+        "bounds": {
+          "left": 1.5,
+          "bottom": 4.5,
+          "right": 2.5,
+          "top": 5.5
+        },
+        "pads": [
+          {
+            "id": "1",
+            "x": 2,
+            "y": 5,
+            "width": 0.8,
+            "height": 0.8,
+            "shape": "round",
+            "net": "A",
+            "layer": 1
+          }
+        ]
+      },
+      {
+        "id": "U2",
+        "index": 1,
+        "x": 8,
+        "y": 5,
+        "rotation": 0,
+        "locked": true,
+        "bounds": {
+          "left": 7.5,
+          "bottom": 4.5,
+          "right": 8.5,
+          "top": 5.5
+        },
+        "pads": [
+          {
+            "id": "1",
+            "x": 8,
+            "y": 5,
+            "width": 0.8,
+            "height": 0.8,
+            "shape": "round",
+            "net": "A",
+            "layer": 1
+          }
+        ]
+      }
+    ],
+    "moves": [],
+    "stats": {
+      "movedCount": 0,
+      "mode": "route-only"
+    }
+  },
+  "routing": {
+    "tracks": [],
+    "vias": [],
+    "unrouted": [
+      {
+        "net": "A",
+        "from": "U1:1",
+        "to": "U2:1",
+        "reason": "Net reserved for manual/critical routing in config.json"
+      }
+    ],
+    "stats": {
+      "totalPairs": 1,
+      "routedPairs": 0,
+      "expansions": 0,
+      "pass": 1,
+      "netOrder": [
+        "A"
+      ],
+      "manualNets": [
+        {
+          "net": "A",
+          "reason": "Net reserved for manual/critical routing in config.json",
+          "disconnectedGroups": 2,
+          "padCount": 2
+        }
+      ],
+      "completionPercent": 0,
+      "manualNetCount": 1,
+      "completionScope": "Required disconnected-group joins, plus one review item for each already connected unsupported net.",
+      "totalWireLength": 0,
+      "viaCount": 0,
+      "trackCount": 0,
+      "validationErrors": [],
+      "grid": 0.25,
+      "gridCells": 3362,
+      "signalLayers": [
+        1,
+        32
+      ],
+      "throughViasOnly": true,
+      "passesTried": 1,
+      "limitations": [
+        "Conservative grid routing; finer grids can change routability.",
+        "Only explicitly exported signal layers and through-hole vias are supported.",
+        "Geometric validation is not a replacement for Altium DRC or electrical/high-speed review."
+      ]
+    }
+  }
+}

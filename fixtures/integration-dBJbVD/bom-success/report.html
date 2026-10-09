@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SmartPCB 3.0</title><style>
+body{font:16px system-ui;background:#101820;color:#d9e7ee;margin:30px;max-width:1300px}h1{font-size:28px}p{line-height:1.6}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:20px}.cards svg{width:100%;max-height:650px}
+table{border-collapse:collapse;width:100%}td,th{padding:9px;text-align:left;border-bottom:1px solid #3b4c58}
+.metric{font-weight:600;color:#8bd6c7}.note{color:#adbdc7}select{font:inherit;padding:6px;background:#182d33;color:#d9e7ee;border:1px solid #6aa5a0}pre{white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:750px){.cards{grid-template-columns:1fr}body{margin:15px}}
+</style></head><body>
+<h1>SmartPCB 3.0 — phương án tự động</h1>
+<p class="metric">Di chuyển 0 linh kiện · xử lý 0/1 hạng mục kết nối/kiểm tra · thêm 0 via · đường mới 0.00 mm.</p><p class="note">Có 1 net cần xử lý riêng. Tổng hạng mục gồm nối các nhóm đồng rời nhau và kiểm tra net chưa hỗ trợ; đây không phải phần trăm hoàn tất PCB của Altium.</p>
+<p class="note">Báo cáo là phương án hình học. Cần kiểm tra DRC và yêu cầu điện, timing, trở kháng trong Altium. </p>
+
+<label>Xem đồng trên lớp: <select id="layer"><option value="">Tất cả lớp tín hiệu</option><option value="1">Top Layer</option><option value="32">Bottom Layer</option></select></label>
+<div class="cards"><div><h2>Trước</h2><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-label="PCB plan"><rect width="100%" height="100%" fill="#101a22"/><polygon points="3.000,13.000 13.000,13.000 13.000,3.000 3.000,3.000" fill="#182d33" stroke="#6aa5a0" stroke-width="0.2"/><rect x="4.500" y="7.500" width="1" height="1" fill="none" stroke="#efc878" stroke-width="0.1"/><text x="5.000" y="7.25" text-anchor="middle" fill="#d9e7ee" font-size="0.9">U1</text><rect data-layer="1" x="4.600" y="7.600" width="0.8" height="0.8" rx="0.4" transform="rotate(0 5.000 8.000)" fill="#debd66"><title>U1-1 A</title></rect><rect x="10.500" y="7.500" width="1" height="1" fill="none" stroke="#efc878" stroke-width="0.1"/><text x="11.000" y="7.25" text-anchor="middle" fill="#d9e7ee" font-size="0.9">U2</text><rect data-layer="1" x="10.600" y="7.600" width="0.8" height="0.8" rx="0.4" transform="rotate(0 11.000 8.000)" fill="#debd66"><title>U2-1 A</title></rect></svg></div><div><h2>Sau</h2><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-label="PCB plan"><rect width="100%" height="100%" fill="#101a22"/><polygon points="3.000,13.000 13.000,13.000 13.000,3.000 3.000,3.000" fill="#182d33" stroke="#6aa5a0" stroke-width="0.2"/><rect x="4.500" y="7.500" width="1" height="1" fill="none" stroke="#efc878" stroke-width="0.1"/><text x="5.000" y="7.25" text-anchor="middle" fill="#d9e7ee" font-size="0.9">U1</text><rect data-layer="1" x="4.600" y="7.600" width="0.8" height="0.8" rx="0.4" transform="rotate(0 5.000 8.000)" fill="#debd66"><title>U1-1 A</title></rect><rect x="10.500" y="7.500" width="1" height="1" fill="none" stroke="#efc878" stroke-width="0.1"/><text x="11.000" y="7.25" text-anchor="middle" fill="#d9e7ee" font-size="0.9">U2</text><rect data-layer="1" x="10.600" y="7.600" width="0.8" height="0.8" rx="0.4" transform="rotate(0 11.000 8.000)" fill="#debd66"><title>U2-1 A</title></rect></svg></div></div>
+<h2>Kết nối còn lại (1)</h2>
+<table><thead><tr><th>Net</th><th>Từ</th><th>Đến</th><th>Lý do</th></tr></thead><tbody><tr><td>A</td><td>U1:1</td><td>U2:1</td><td>Net reserved for manual/critical routing in config.json</td></tr></tbody></table>
+<details><summary>Chỉ số bố trí</summary><pre>{
+  &quot;movedCount&quot;: 0,
+  &quot;mode&quot;: &quot;route-only&quot;
+}</pre></details>
+<details><summary>Chỉ số đi dây</summary><pre>{
+  &quot;totalPairs&quot;: 1,
+  &quot;routedPairs&quot;: 0,
+  &quot;expansions&quot;: 0,
+  &quot;pass&quot;: 1,
+  &quot;netOrder&quot;: [
+    &quot;A&quot;
+  ],
+  &quot;manualNets&quot;: [
+    {
+      &quot;net&quot;: &quot;A&quot;,
+      &quot;reason&quot;: &quot;Net reserved for manual/critical routing in config.json&quot;,
+      &quot;disconnectedGroups&quot;: 2,
+      &quot;padCount&quot;: 2
+    }
+  ],
+  &quot;completionPercent&quot;: 0,
+  &quot;manualNetCount&quot;: 1,
+  &quot;completionScope&quot;: &quot;Required disconnected-group joins, plus one review item for each already connected unsupported net.&quot;,
+  &quot;totalWireLength&quot;: 0,
+  &quot;viaCount&quot;: 0,
+  &quot;trackCount&quot;: 0,
+  &quot;validationErrors&quot;: [],
+  &quot;grid&quot;: 0.25,
+  &quot;gridCells&quot;: 3362,
+  &quot;signalLayers&quot;: [
+    1,
+    32
+  ],
+  &quot;throughViasOnly&quot;: true,
+  &quot;passesTried&quot;: 1,
+  &quot;limitations&quot;: [
+    &quot;Conservative grid routing; finer grids can change routability.&quot;,
+    &quot;Only explicitly exported signal layers and through-hole vias are supported.&quot;,
+    &quot;Geometric validation is not a replacement for Altium DRC or electrical/high-speed review.&quot;
+  ]
+}</pre></details>
+<script>document.getElementById('layer').addEventListener('change',function(){const value=this.value;document.querySelectorAll('[data-layer]').forEach(e=>e.style.display=!value||e.getAttribute('data-layer')===value?'':'none')});</script>
+</body></html>

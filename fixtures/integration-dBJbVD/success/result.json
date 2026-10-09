@@ -1,0 +1,508 @@
+{
+  "version": "3.0",
+  "placement": {
+    "components": [
+      {
+        "id": "J1",
+        "index": 0,
+        "x": 2,
+        "y": 3,
+        "rotation": 0,
+        "locked": true,
+        "comment": "Power / signal input",
+        "footprint": "DEMO_2PIN",
+        "bounds": {
+          "left": 1.2,
+          "bottom": 1.4,
+          "right": 2.8,
+          "top": 4.6
+        },
+        "pads": [
+          {
+            "id": "1",
+            "x": 2,
+            "y": 2.2,
+            "net": "3V3",
+            "layer": 1,
+            "shape": "round",
+            "width": 1.1,
+            "height": 1.1,
+            "throughHole": true
+          },
+          {
+            "id": "2",
+            "x": 2,
+            "y": 3.8,
+            "net": "SIG",
+            "layer": 1,
+            "shape": "round",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": true
+          }
+        ],
+        "lockReason": "Connector, mounting hole or test point anchor"
+      },
+      {
+        "id": "J2",
+        "index": 1,
+        "x": 15,
+        "y": 3,
+        "rotation": 0,
+        "locked": true,
+        "comment": "Power / ground output",
+        "footprint": "DEMO_2PIN",
+        "bounds": {
+          "left": 14.2,
+          "bottom": 1.4,
+          "right": 15.8,
+          "top": 4.6
+        },
+        "pads": [
+          {
+            "id": "1",
+            "x": 15,
+            "y": 2.2,
+            "net": "3V3",
+            "layer": 1,
+            "shape": "round",
+            "width": 1.1,
+            "height": 1.1,
+            "throughHole": true
+          },
+          {
+            "id": "2",
+            "x": 15,
+            "y": 3.8,
+            "net": "GND",
+            "layer": 1,
+            "shape": "round",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": true
+          }
+        ],
+        "lockReason": "Connector, mounting hole or test point anchor"
+      },
+      {
+        "id": "U1",
+        "index": 2,
+        "x": 4.800000000000001,
+        "y": 2.6,
+        "rotation": 0,
+        "locked": false,
+        "comment": "Demo three-pin device",
+        "footprint": "DEMO_3PIN",
+        "bounds": {
+          "left": 3.3000000000000007,
+          "bottom": 1.0999999999999996,
+          "right": 6.300000000000001,
+          "top": 4.199999999999999
+        },
+        "pads": [
+          {
+            "id": "1",
+            "x": 4,
+            "y": 2.5999999999999996,
+            "net": "SIG",
+            "layer": 1,
+            "shape": "rect",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": false
+          },
+          {
+            "id": "2",
+            "x": 5.600000000000001,
+            "y": 2.5999999999999996,
+            "net": "3V3",
+            "layer": 1,
+            "shape": "rect",
+            "width": 1.1,
+            "height": 1.1,
+            "throughHole": false
+          },
+          {
+            "id": "3",
+            "x": 4.800000000000001,
+            "y": 3.799999999999999,
+            "net": "GND",
+            "layer": 1,
+            "shape": "rect",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": false
+          }
+        ]
+      },
+      {
+        "id": "R1",
+        "index": 3,
+        "x": 7.800000000000001,
+        "y": 3.8000000000000003,
+        "rotation": 0,
+        "locked": false,
+        "comment": "10k",
+        "footprint": "DEMO_RESISTOR",
+        "bounds": {
+          "left": 6.800000000000001,
+          "bottom": 3.3000000000000007,
+          "right": 8.8,
+          "top": 4.300000000000001
+        },
+        "pads": [
+          {
+            "id": "1",
+            "x": 7.199999999999999,
+            "y": 3.8000000000000007,
+            "net": "SIG",
+            "layer": 1,
+            "shape": "rect",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": false
+          },
+          {
+            "id": "2",
+            "x": 8.4,
+            "y": 3.8000000000000007,
+            "net": "GND",
+            "layer": 1,
+            "shape": "rect",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": false
+          }
+        ]
+      },
+      {
+        "id": "C1",
+        "index": 4,
+        "x": 7.800000000000001,
+        "y": 2.4000000000000004,
+        "rotation": 0,
+        "locked": false,
+        "comment": "100nF",
+        "footprint": "DEMO_CAPACITOR",
+        "bounds": {
+          "left": 6.800000000000001,
+          "bottom": 1.9000000000000004,
+          "right": 8.8,
+          "top": 2.9000000000000004
+        },
+        "pads": [
+          {
+            "id": "1",
+            "x": 7.200000000000001,
+            "y": 2.4000000000000004,
+            "net": "3V3",
+            "layer": 1,
+            "shape": "rect",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": false
+          },
+          {
+            "id": "2",
+            "x": 8.4,
+            "y": 2.4000000000000004,
+            "net": "GND",
+            "layer": 1,
+            "shape": "rect",
+            "width": 0.8,
+            "height": 0.8,
+            "throughHole": false
+          }
+        ]
+      }
+    ],
+    "moves": [
+      {
+        "id": "U1",
+        "x": 4.800000000000001,
+        "y": 2.6,
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "x": 7.800000000000001,
+        "y": 3.8000000000000003,
+        "rotation": 0
+      },
+      {
+        "id": "C1",
+        "x": 7.800000000000001,
+        "y": 2.4000000000000004,
+        "rotation": 0
+      }
+    ],
+    "stats": {
+      "componentCount": 5,
+      "movableCount": 3,
+      "lockedCount": 2,
+      "routeProtectedCount": 0,
+      "unknownRoutingProtectedAll": false,
+      "movedCount": 3,
+      "activeNetCount": 3,
+      "decouplerHeuristicCount": 0,
+      "wireMetricBefore": 37.15829248411783,
+      "wireMetricAfter": 18.95924012933455,
+      "wireMetricUnits": "weighted HPWL, mm",
+      "costBefore": 42.74521105774363,
+      "costAfter": 22.583602081687058,
+      "congestionBefore": 0.10540607439595706,
+      "congestionAfter": 0.09577214309920945,
+      "crossingsBefore": 0,
+      "crossingsAfter": 0,
+      "originalFeasible": false,
+      "iterations": 1000,
+      "feasibleTrials": 149,
+      "acceptedTrials": 27,
+      "seed": 2026,
+      "rotationPolicy": "preserve exported component rotations",
+      "geometryValidated": true,
+      "componentGap": 0.4,
+      "edgeMargin": 0.3,
+      "outlineTolerance": 0.01,
+      "existingFixedViolationCount": 0,
+      "warnings": []
+    }
+  },
+  "routing": {
+    "tracks": [
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 7.200000000000001,
+        "y1": 2.4000000000000004,
+        "x2": 5.600000000000001,
+        "y2": 2.5999999999999996,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 2,
+        "y1": 2.2,
+        "x2": 2.8000000000000003,
+        "y2": 1.6,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 2.8000000000000003,
+        "y1": 1.6,
+        "x2": 4.800000000000001,
+        "y2": 1.6,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 4.800000000000001,
+        "y1": 1.6,
+        "x2": 5,
+        "y2": 1.8,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 5,
+        "y1": 1.8,
+        "x2": 5.600000000000001,
+        "y2": 2.5999999999999996,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 7.200000000000001,
+        "y1": 2.4000000000000004,
+        "x2": 7.6000000000000005,
+        "y2": 1.6,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 7.6000000000000005,
+        "y1": 1.6,
+        "x2": 7.6000000000000005,
+        "y2": 1.4000000000000001,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 7.6000000000000005,
+        "y1": 1.4000000000000001,
+        "x2": 9.200000000000001,
+        "y2": 1.4000000000000001,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 9.200000000000001,
+        "y1": 1.4000000000000001,
+        "x2": 9.4,
+        "y2": 1.6,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 9.4,
+        "y1": 1.6,
+        "x2": 9.4,
+        "y2": 2.4000000000000004,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 9.4,
+        "y1": 2.4000000000000004,
+        "x2": 9.600000000000001,
+        "y2": 2.6,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 9.600000000000001,
+        "y1": 2.6,
+        "x2": 14.200000000000001,
+        "y2": 2.6,
+        "width": 0.6
+      },
+      {
+        "net": "3V3",
+        "layer": 1,
+        "x1": 14.200000000000001,
+        "y1": 2.6,
+        "x2": 15,
+        "y2": 2.2,
+        "width": 0.6
+      },
+      {
+        "net": "GND",
+        "layer": 1,
+        "x1": 8.4,
+        "y1": 2.4000000000000004,
+        "x2": 8.4,
+        "y2": 3.8000000000000007,
+        "width": 0.3
+      },
+      {
+        "net": "GND",
+        "layer": 1,
+        "x1": 8.4,
+        "y1": 3.8000000000000007,
+        "x2": 7.800000000000001,
+        "y2": 4.6000000000000005,
+        "width": 0.3
+      },
+      {
+        "net": "GND",
+        "layer": 1,
+        "x1": 7.800000000000001,
+        "y1": 4.6000000000000005,
+        "x2": 5.6000000000000005,
+        "y2": 4.6000000000000005,
+        "width": 0.3
+      },
+      {
+        "net": "GND",
+        "layer": 1,
+        "x1": 5.6000000000000005,
+        "y1": 4.6000000000000005,
+        "x2": 4.800000000000001,
+        "y2": 3.799999999999999,
+        "width": 0.3
+      },
+      {
+        "net": "GND",
+        "layer": 1,
+        "x1": 15,
+        "y1": 3.8,
+        "x2": 8.4,
+        "y2": 3.8000000000000007,
+        "width": 0.3
+      },
+      {
+        "net": "SIG",
+        "layer": 1,
+        "x1": 2,
+        "y1": 3.8,
+        "x2": 4,
+        "y2": 2.5999999999999996,
+        "width": 0.2
+      },
+      {
+        "net": "SIG",
+        "layer": 32,
+        "x1": 2,
+        "y1": 3.8,
+        "x2": 6.6000000000000005,
+        "y2": 3.8000000000000003,
+        "width": 0.2
+      },
+      {
+        "net": "SIG",
+        "layer": 1,
+        "x1": 6.6000000000000005,
+        "y1": 3.8000000000000003,
+        "x2": 7.199999999999999,
+        "y2": 3.8000000000000007,
+        "width": 0.2
+      }
+    ],
+    "vias": [
+      {
+        "net": "SIG",
+        "x": 6.6000000000000005,
+        "y": 3.8000000000000003,
+        "diameter": 0.6,
+        "hole": 0.3,
+        "fromLayer": 1,
+        "toLayer": 32
+      }
+    ],
+    "unrouted": [],
+    "stats": {
+      "totalPairs": 8,
+      "routedPairs": 8,
+      "expansions": 33250,
+      "pass": 1,
+      "netOrder": [
+        "3V3",
+        "GND",
+        "SIG"
+      ],
+      "manualNets": [],
+      "completionPercent": 100,
+      "manualNetCount": 0,
+      "completionScope": "Required disconnected-group joins in the supported exported copper model.",
+      "totalWireLength": 35.31358567692,
+      "viaCount": 1,
+      "trackCount": 21,
+      "validationErrors": [],
+      "grid": 0.2,
+      "gridCells": 12922,
+      "signalLayers": [
+        1,
+        32
+      ],
+      "throughViasOnly": true,
+      "passesTried": 2,
+      "limitations": [
+        "Conservative grid routing; finer grids can change routability.",
+        "Only explicitly exported signal layers and through-hole vias are supported.",
+        "Geometric validation is not a replacement for Altium DRC or electrical/high-speed review."
+      ]
+    }
+  }
+}

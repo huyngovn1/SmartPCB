@@ -1,0 +1,102 @@
+Function SP_PadJSON(Pad : IPCB_Pad; ComponentIndex : Integer) : String;
+Var I, S, FirstShape : Integer;
+    XSize, YSize, MaxX, MaxY, FirstX, FirstY : TCoord;
+    CornerSize, FirstCorner, LayerCorner, HoleExtent : TCoord;
+    Through, Exact : Boolean;
+    ShapeText, ReasonText : String; R : TCoordRect;
+Begin
+    Through := Pad.Layer = eMultiLayer;
+    Exact := True; ReasonText := ''; CornerSize := 0;
+    R := Pad.BoundingRectangle;
+    If Through Then
+    Begin
+        MaxX := 0; MaxY := 0; FirstX := 0; FirstY := 0;
+        FirstShape := -1; FirstCorner := 0;
+        For I := 0 To SP_LCount - 1 Do
+        Begin
+            XSize := Pad.GetState_XSizeOnLayer(SP_Layer[I]);
+            YSize := Pad.GetState_YSizeOnLayer(SP_Layer[I]);
+            S := Pad.GetState_ShapeOnLayer(SP_Layer[I]);
+            LayerCorner := 0;
+            If S = eRoundedRectangular Then
+                LayerCorner := Pad.GetState_CornerRadiusOnLayer(SP_Layer[I]);
+            If I = 0 Then
+            Begin
+                FirstX := XSize; FirstY := YSize;
+                FirstShape := S; FirstCorner := LayerCorner;
+            End;
+            If (XSize <> FirstX) Or (YSize <> FirstY) Or
+               (S <> FirstShape) Or (LayerCorner <> FirstCorner) Then Exact := False;
+            If XSize > MaxX Then MaxX := XSize;
+            If YSize > MaxY Then MaxY := YSize;
+        End;
+        XSize := MaxX; YSize := MaxY; S := FirstShape;
+        CornerSize := FirstCorner;
+        If Pad.Plated = False Then Exact := False;
+        If Pad.HoleSize <= 0 Then Exact := False;
+        If Pad.HoleType <> eRoundHole Then Exact := False;
+        If Not Exact Then ReasonText := 'Nonuniform, unplated or unsupported multilayer pad';
+    End
+    Else
+    Begin
+        If SP_LayerIndex(Pad.Layer) < 0 Then
+            SP_Fail('Pad is not on an exported signal layer.');
+        XSize := Pad.GetState_XSizeOnLayer(Pad.Layer);
+        YSize := Pad.GetState_YSizeOnLayer(Pad.Layer);
+        S := Pad.GetState_ShapeOnLayer(Pad.Layer);
+        If S = eRoundedRectangular Then
+            CornerSize := Pad.GetState_CornerRadiusOnLayer(Pad.Layer);
+        If Pad.HoleSize > 0 Then
+        Begin Exact := False; ReasonText := 'Drilled single-layer pad'; End;
+    End;
+    If (XSize <= 0) Or (YSize <= 0) Then SP_Fail('Pad has invalid physical size.');
+    If S = eRectangular Then ShapeText := 'rect'
+    Else If (S = eRounded) Or ((S = eCircleShape) And (XSize = YSize)) Then
+        ShapeText := 'round'
+    Else If S = eRoundedRectangular Then
+    Begin
+        ShapeText := 'roundrect';
+        If (CornerSize < 0) Or (2 * CornerSize > XSize) Or (2 * CornerSize > YSize) Then
+        Begin Exact := False; ReasonText := 'Invalid rounded-rectangle corner radius'; End;
+    End
+    Else
+    Begin Exact := False; ShapeText := 'rect'; ReasonText := 'Unsupported native pad shape'; End;
+    If Pad.Mode <> ePadMode_Simple Then
+    Begin Exact := False; ReasonText := 'Only Simple mode pads are supported by this adapter'; End;
+    If Exact Then
+    Begin
+        { BoundingRectangle can include solder-mask expansion. Copper size comes
+          from XSizeOnLayer/YSizeOnLayer, shape, rotation and corner radius.
+          Use the general rectangle only to reject unsupported center offsets. }
+        If (Abs((R.Left + R.Right) / 2 - Pad.X) > MMsToCoord(0.005)) Or
+           (Abs((R.Bottom + R.Top) / 2 - Pad.Y) > MMsToCoord(0.005)) Then
+        Begin Exact := False; ReasonText := 'Pad center/offset is unsupported by native adapter'; End;
+    End;
+    If Not Exact Then
+    Begin
+        If Pad.HoleSize > 0 Then
+        Begin
+            Through := True; HoleExtent := Pad.HoleSize;
+            If Pad.HoleWidth > HoleExtent Then HoleExtent := Pad.HoleWidth;
+            HoleExtent := Round(HoleExtent * 0.707106781186548) + 4;
+            If Pad.X - HoleExtent < R.Left Then R.Left := Pad.X - HoleExtent;
+            If Pad.X + HoleExtent > R.Right Then R.Right := Pad.X + HoleExtent;
+            If Pad.Y - HoleExtent < R.Bottom Then R.Bottom := Pad.Y - HoleExtent;
+            If Pad.Y + HoleExtent > R.Top Then R.Top := Pad.Y + HoleExtent;
+        End;
+        SP_Protect(SP_NetName(Pad), ReasonText);
+        If ComponentIndex >= 0 Then SP_CompLocked[ComponentIndex] := True;
+        Result := '{"id":' + SP_JSON(Pad.Name) + ',"net":' + SP_JSON(SP_NetName(Pad)) +
+            ',"x":' + SP_MM((R.Left + R.Right) Div 2) + ',"y":' + SP_MM((R.Bottom + R.Top) Div 2) +
+            ',"width":' + SP_MM(R.Right - R.Left) + ',"height":' + SP_MM(R.Top - R.Bottom) +
+            ',"rotation":0,"shape":"rect","throughHole":' + SP_Bool(Through) +
+            ',"layer":' + IntToStr(Pad.Layer) + ',"unsupportedGeometry":true}';
+    End
+    Else
+        Result := '{"id":' + SP_JSON(Pad.Name) + ',"net":' + SP_JSON(SP_NetName(Pad)) +
+            ',"x":' + SP_MM(Pad.X) + ',"y":' + SP_MM(Pad.Y) + ',"width":' + SP_MM(XSize) +
+            ',"height":' + SP_MM(YSize) + ',"rotation":' + SP_Number(Pad.Rotation) +
+            ',"shape":' + SP_JSON(ShapeText) + ',"cornerRadius":' + SP_MM(CornerSize) +
+            ',"throughHole":' + SP_Bool(Through) + ',"layer":' + IntToStr(Pad.Layer) +
+            ',"hole":' + SP_MM(Pad.HoleSize) + '}';
+End;

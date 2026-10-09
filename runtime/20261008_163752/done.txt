@@ -1,0 +1,2 @@
+ERROR
+Solver exited without a completion file.

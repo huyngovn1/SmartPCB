@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 3,
+  "sourceFile": "DEMO_ONLY.PcbDoc",
+  "netNames": ["3V3", "SIG", "GND"],
+  "layers": [{ "id": 1, "name": "Top Layer" }, { "id": 32, "name": "Bottom Layer" }],
+  "throughViaLow": 1,
+  "throughViaHigh": 32,
+  "outline": [
+    { "x": 0, "y": 0 }, { "x": 18, "y": 0 }, { "x": 18, "y": 8 },
+    { "x": 11, "y": 8 }, { "x": 11, "y": 14 }, { "x": 0, "y": 14 }
+  ],
+  "cutouts": [[{ "x": 5, "y": 5 }, { "x": 7, "y": 5 }, { "x": 7, "y": 7 }, { "x": 5, "y": 7 }]],
+  "keepouts": [{ "bounds": { "left": 10, "bottom": 1, "right": 11, "top": 2 }, "layers": null }],
+  "components": [
+    {
+      "id": "J1", "index": 0, "x": 2, "y": 3, "rotation": 0, "locked": true,
+      "comment": "Power / signal input", "footprint": "DEMO_2PIN",
+      "bounds": { "left": 1.2, "bottom": 1.4, "right": 2.8, "top": 4.6 },
+      "pads": [
+        { "id": "1", "x": 2, "y": 2.2, "net": "3V3", "layer": 1, "shape": "round", "width": 1.1, "height": 1.1, "throughHole": true },
+        { "id": "2", "x": 2, "y": 3.8, "net": "SIG", "layer": 1, "shape": "round", "width": 0.8, "height": 0.8, "throughHole": true }
+      ]
+    },
+    {
+      "id": "J2", "index": 1, "x": 15, "y": 3, "rotation": 0, "locked": true,
+      "comment": "Power / ground output", "footprint": "DEMO_2PIN",
+      "bounds": { "left": 14.2, "bottom": 1.4, "right": 15.8, "top": 4.6 },
+      "pads": [
+        { "id": "1", "x": 15, "y": 2.2, "net": "3V3", "layer": 1, "shape": "round", "width": 1.1, "height": 1.1, "throughHole": true },
+        { "id": "2", "x": 15, "y": 3.8, "net": "GND", "layer": 1, "shape": "round", "width": 0.8, "height": 0.8, "throughHole": true }
+      ]
+    },
+    {
+      "id": "U1", "index": 2, "x": 14, "y": 12, "rotation": 0, "locked": false,
+      "comment": "Demo three-pin device", "footprint": "DEMO_3PIN",
+      "bounds": { "left": 12.5, "bottom": 10.5, "right": 15.5, "top": 13.6 },
+      "pads": [
+        { "id": "1", "x": 13.2, "y": 12, "net": "SIG", "layer": 1, "shape": "rect", "width": 0.8, "height": 0.8, "throughHole": false },
+        { "id": "2", "x": 14.8, "y": 12, "net": "3V3", "layer": 1, "shape": "rect", "width": 1.1, "height": 1.1, "throughHole": false },
+        { "id": "3", "x": 14, "y": 13.2, "net": "GND", "layer": 1, "shape": "rect", "width": 0.8, "height": 0.8, "throughHole": false }
+      ]
+    },
+    {
+      "id": "R1", "index": 3, "x": 13.8, "y": 11, "rotation": 0, "locked": false,
+      "comment": "10k", "footprint": "DEMO_RESISTOR",
+      "bounds": { "left": 12.8, "bottom": 10.5, "right": 14.8, "top": 11.5 },
+      "pads": [
+        { "id": "1", "x": 13.2, "y": 11, "net": "SIG", "layer": 1, "shape": "rect", "width": 0.8, "height": 0.8, "throughHole": false },
+        { "id": "2", "x": 14.4, "y": 11, "net": "GND", "layer": 1, "shape": "rect", "width": 0.8, "height": 0.8, "throughHole": false }
+      ]
+    },
+    {
+      "id": "C1", "index": 4, "x": 6, "y": 11, "rotation": 0, "locked": false,
+      "comment": "100nF", "footprint": "DEMO_CAPACITOR",
+      "bounds": { "left": 5, "bottom": 10.5, "right": 7, "top": 11.5 },
+      "pads": [
+        { "id": "1", "x": 5.4, "y": 11, "net": "3V3", "layer": 1, "shape": "rect", "width": 0.8, "height": 0.8, "throughHole": false },
+        { "id": "2", "x": 6.6, "y": 11, "net": "GND", "layer": 1, "shape": "rect", "width": 0.8, "height": 0.8, "throughHole": false }
+      ]
+    }
+  ],
+  "tracks": [],
+  "vias": [],
+  "rules": {
+    "default": { "width": 0.2, "clearance": 0.15, "viaDiameter": 0.6, "viaHole": 0.3 },
+    "nets": {
+      "3V3": { "width": 0.6, "minWidth": 0.25, "maxWidth": 0.8, "clearance": 0.15, "viaDiameter": 0.8, "viaHole": 0.3, "priority": 20 },
+      "GND": { "width": 0.3, "priority": 10 },
+      "SIG": { "width": 0.2 }
+    }
+  },
+  "settings": {
+    "grid": 0.2, "componentGap": 0.4, "edgeMargin": 0.3, "routingEdgeMargin": 0.1,
+    "outlineTolerance": 0.01, "placementIterations": 1000, "seed": 2026,
+    "routingPasses": 2, "maxExpansions": 50000, "maxCells": 500000, "endpointSearchCells": 4,
+    "anchorConnectors": true, "mode": "place-and-route"
+  }
+}

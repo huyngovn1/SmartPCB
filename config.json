@@ -1,0 +1,21 @@
+{
+  "settings": {
+    "grid": 0.15,
+    "componentGap": 0.5,
+    "edgeMargin": 0.5,
+    "routingEdgeMargin": 0.15,
+    "outlineTolerance": 0.01,
+    "geometryTolerance": 0.01,
+    "placementIterations": 8000,
+    "seed": 16,
+    "viaPenalty": 8,
+    "bendPenalty": 0.08,
+    "routingPasses": 2,
+    "maxExpansions": 80000,
+    "maxCells": 4000000,
+    "anchorConnectors": true,
+    "maxTotalExpansions": 1000000
+  },
+  "manualNets": [],
+  "routingPriorities": {}
+}

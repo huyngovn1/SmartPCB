@@ -1,0 +1,149 @@
+Procedure SP_Export(Lines : TStringList);
+Var I, J, K, FreePads : Integer; It : IPCB_BoardIterator; P : IPCB_Primitive;
+    T : IPCB_Track; V : IPCB_Via; Pad : IPCB_Pad; O : IPCB_BoardOutline; Seg : TPolySegment;
+    Components, Tracks, Vias : TStringList; S, NetText : String; R : TCoordRect; SimpleVia : Boolean;
+    Reg : IPCB_Region;
+Begin
+    Lines.Clear; SP_ReadTables; SP_ReadRules;
+    Components := TStringList.Create; Tracks := TStringList.Create; Vias := TStringList.Create;
+    Try
+        For I := 0 To SP_CCount - 1 Do Components.Add(SP_ComponentJSON(I));
+        FreePads := 0;
+        It := SP_Board.BoardIterator_Create;
+        If It = Nil Then SP_Fail('Cannot read PCB primitives.');
+        Try
+            It.AddFilter_ObjectSet(MkSet(ePadObject, eTrackObject, eViaObject, eArcObject,
+                eFillObject, eRegionObject, ePolyObject, eTextObject));
+            It.AddFilter_LayerSet(AllLayers); It.AddFilter_Method(eProcessAll);
+            P := It.FirstPCBObject;
+            While P <> Nil Do
+            Begin
+                If (P.Component = Nil) And (P.ObjectId <> eComponentObject) And
+                   (P.ViewableObjectID <> eViewableObject_BoardRegion) Then
+                Begin
+                    NetText := SP_NetName(P);
+                    If (P.Layer = eKeepOutLayer) Or P.IsKeepout Then SP_Obstacle(P, (P.Layer = eKeepOutLayer) Or (P.Layer = eMultiLayer))
+                    Else If P.ObjectId = ePadObject Then
+                    Begin
+                        Pad := P; R := P.BoundingRectangle;
+                        Components.Add('{"id":' + SP_JSON('@FREEPAD_' + IntToStr(FreePads)) +
+                            ',"index":' + IntToStr(SP_MAX_COMPONENTS + FreePads) + ',"x":' + SP_MM(Pad.X) +
+                            ',"y":' + SP_MM(Pad.Y) + ',"rotation":0,"locked":true,"bounds":' + SP_Bounds(R) +
+                            ',"pads":[' + SP_PadJSON(Pad, -1) + ']}'); FreePads := FreePads + 1;
+                    End
+                    Else If (P.ObjectId = eTrackObject) And (SP_LayerIndex(P.Layer) >= 0) Then
+                    Begin
+                        T := P;
+                        Tracks.Add('{"net":' + SP_JSON(NetText) + ',"layer":' + IntToStr(T.Layer) +
+                            ',"x1":' + SP_MM(T.X1) + ',"y1":' + SP_MM(T.Y1) + ',"x2":' + SP_MM(T.X2) +
+                            ',"y2":' + SP_MM(T.Y2) + ',"width":' + SP_MM(T.Width) + '}');
+                    End
+                    Else If P.ObjectId = eViaObject Then
+                    Begin
+                        V := P;
+                        SimpleVia := True;
+                        For J := 0 To SP_LCount - 1 Do
+                            If V.GetState_SizeOnLayer(SP_Layer[J]) <> V.Size Then SimpleVia := False;
+                        If ((V.LowLayer = eTopLayer) And (V.HighLayer = eBottomLayer)) Or
+                           ((V.HighLayer = eTopLayer) And (V.LowLayer = eBottomLayer)) Then
+                        Begin
+                            If SimpleVia Then
+                            Vias.Add('{"net":' + SP_JSON(NetText) + ',"x":' + SP_MM(V.X) + ',"y":' + SP_MM(V.Y) +
+                                ',"diameter":' + SP_MM(V.Size) + ',"hole":' + SP_MM(V.HoleSize) +
+                                ',"fromLayer":' + IntToStr(SP_Layer[0]) + ',"toLayer":' + IntToStr(SP_Layer[SP_LCount - 1]) + '}')
+                            Else Begin SP_Obstacle(P, True); SP_Protect(NetText, 'Existing via has nonuniform stack geometry'); End;
+                        End
+                        Else Begin SP_Obstacle(P, True); SP_Protect(NetText, 'Existing blind or buried via'); End;
+                    End
+                    Else If P.ObjectId = eRegionObject Then
+                    Begin
+                        Reg := P;
+                        If (Reg.Kind = eRegionKind_BoardCutout) Or (Reg.Kind = eRegionKind_Cavity) Then
+                            SP_Obstacle(P, True)
+                        Else If Reg.Kind = eRegionKind_Copper Then
+                        Begin
+                            If SP_IsSignal(P.Layer) Or (P.Layer = eMultiLayer) Then
+                            Begin
+                                SP_Obstacle(P, P.Layer = eMultiLayer);
+                                SP_Protect(NetText, 'Existing copper region');
+                            End;
+                        End
+                        Else If (Reg.Kind = eRegionKind_NamedRegion) Or (Reg.Kind = eRegionKind_Cutout) Then
+                        Begin
+                            { Board definition and polygon exclusions are not copper obstacles. }
+                        End
+                        Else SP_Fail('Unsupported native region kind.');
+                    End
+                    Else If (P.ObjectId = ePolyObject) Or (P.ObjectId = eFillObject) Or
+                            (P.ObjectId = eArcObject) Or (P.ObjectId = eTextObject) Then
+                    Begin
+                        If SP_IsSignal(P.Layer) Or (P.Layer = eMultiLayer) Then
+                        Begin
+                            SP_Obstacle(P, P.Layer = eMultiLayer);
+                            SP_Protect(NetText, 'Existing arc, polygon, fill or copper text');
+                        End;
+                    End;
+                End;
+                P := It.NextPCBObject;
+            End;
+        Finally SP_Board.BoardIterator_Destroy(It); End;
+        If Components.Count > SP_MAX_COMPONENTS Then SP_Fail('Components including free pads exceed 2048.');
+        Lines.Add('{"schemaVersion":3,"tool":"SmartPCB 3.0","sourcePath":' + SP_JSON(SP_Board.FileName) +
+            ',"settings":{"mode":' + SP_JSON(SP_Mode) + '},"throughViaLow":' + IntToStr(eTopLayer) +
+            ',"throughViaHigh":' + IntToStr(eBottomLayer) + ',"hasInternalPlanes":' + SP_Bool(SP_HasPlanes) + ',"outlineSegments":[');
+        O := SP_Board.BoardOutline;
+        If O = Nil Then SP_Fail('Native board outline is unavailable.');
+        If O.PointCount < 3 Then SP_Fail('Native board outline has fewer than 3 points.');
+        For I := 0 To O.PointCount - 1 Do
+        Begin
+            Seg := O.GetState_Segments(I); S := '';
+            If I > 0 Then S := ',';
+            S := S + '{"x":' + SP_MM(Seg.vx) + ',"y":' + SP_MM(Seg.vy);
+            If Seg.Kind = ePolySegmentLine Then S := S + ',"kind":"line"}'
+            Else If Seg.Kind = ePolySegmentArc Then S := S + ',"kind":"arc","cx":' + SP_MM(Seg.cx) +
+                ',"cy":' + SP_MM(Seg.cy) + ',"radius":' + SP_MM(Seg.Radius) +
+                ',"angle1":' + SP_Number(Seg.Angle1) + ',"angle2":' + SP_Number(Seg.Angle2) + '}'
+            Else SP_Fail('Unsupported native board outline segment.');
+            Lines.Add(S);
+        End;
+        Lines.Add('],"layers":[');
+        For I := 0 To SP_LCount - 1 Do
+        Begin
+            S := ''; If I > 0 Then S := ',';
+            Lines.Add(S + '{"id":' + IntToStr(SP_Layer[I]) + ',"name":' + SP_JSON(SP_LayerName[I]) + ',"type":"signal"}');
+        End;
+        Lines.Add('],"netNames":[');
+        For I := 0 To SP_NCount - 1 Do Begin S := ''; If I > 0 Then S := ','; Lines.Add(S + SP_JSON(SP_NetNames[I])); End;
+        Lines.Add('],"components":[');
+        For I := 0 To Components.Count - 1 Do Begin S := ''; If I > 0 Then S := ','; Lines.Add(S + Components[I]); End;
+        Lines.Add('],"tracks":[');
+        For I := 0 To Tracks.Count - 1 Do Begin S := ''; If I > 0 Then S := ','; Lines.Add(S + Tracks[I]); End;
+        Lines.Add('],"vias":[');
+        For I := 0 To Vias.Count - 1 Do Begin S := ''; If I > 0 Then S := ','; Lines.Add(S + Vias[I]); End;
+        Lines.Add('],"keepouts":[');
+        For I := 0 To SP_Obstacles.Count - 1 Do Begin S := ''; If I > 0 Then S := ','; Lines.Add(S + SP_Obstacles[I]); End;
+        Lines.Add('],"cutouts":[],"protectedNets":[');
+        For I := 0 To SP_Protected.Count - 1 Do Begin S := ''; If I > 0 Then S := ','; Lines.Add(S + SP_JSON(SP_Protected[I])); End;
+        Lines.Add('],"rawRules":[');
+        For I := 0 To SP_RawRules.Count - 1 Do Begin S := ''; If I > 0 Then S := ','; Lines.Add(S + SP_RawRules[I]); End;
+        Lines.Add('],"rules":{"default":{"width":0.25,"clearance":' + SP_Number(SP_Clearance) +
+            ',"viaDiameter":0.6,"viaHole":0.3},"nets":{');
+        For I := 0 To SP_NCount - 1 Do
+        Begin
+            S := ''; If I > 0 Then S := ',';
+            S := S + SP_JSON(SP_NetNames[I]) + ':{"clearance":' + SP_Number(SP_Clearance) +
+                ',"viaDiameter":' + SP_Number(SP_ViaDiameter[I]) + ',"viaHole":' + SP_Number(SP_ViaHole[I]) +
+                ',"priority":' + SP_Number(SP_Priority[I]) + ',"allowVias":' + SP_Bool(Not SP_HasPlanes) +
+                ',"unsupportedReason":' + SP_JSON(SP_Manual[I]) + ',"layers":{';
+            For J := 0 To SP_LCount - 1 Do
+            Begin
+                K := I * SP_MAX_LAYERS + J; If J > 0 Then S := S + ',';
+                S := S + SP_JSON(IntToStr(SP_Layer[J])) + ':{"allowed":' + SP_Bool(SP_Allowed[K]) +
+                    ',"width":' + SP_Number(SP_Width[K]) + ',"minWidth":' + SP_Number(SP_MinWidth[K]) +
+                    ',"maxWidth":' + SP_Number(SP_MaxWidth[K]) + '}';
+            End;
+            Lines.Add(S + '}}');
+        End;
+        Lines.Add('}}}');
+    Finally Components.Free; Tracks.Free; Vias.Free; End;
+End;
